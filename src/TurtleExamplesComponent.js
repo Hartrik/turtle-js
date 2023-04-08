@@ -1,4 +1,5 @@
 import { DomBuilder } from "./DomBuilder.js";
+import { Analytics } from "./Analytics.js";
 
 import EXAMPLE_1 from "../assets/example-01.turtle";
 import EXAMPLE_2 from "../assets/example-02.turtle";
@@ -31,6 +32,8 @@ export class TurtleExamplesComponent {
 
     /** @type function(string) */
     #loadFunction;
+
+    #virtualClick = false;
 
     constructor(loadFunction) {
         this.#loadFunction = loadFunction;
@@ -69,6 +72,10 @@ export class TurtleExamplesComponent {
                     this.#selectedNode = container;
                     this.#selectedNode.addClass('selected');
                     this.#loadFunction(example);
+
+                    if (!this.#virtualClick) {
+                        Analytics.triggerFeatureUsed(Analytics.FEATURE_SWITCH_EXAMPLE);
+                    }
                 });
 
                 container.append(img);
@@ -83,6 +90,8 @@ export class TurtleExamplesComponent {
     }
 
     selectFirst() {
+        this.#virtualClick = true;
         this.#firstExample.click();
+        this.#virtualClick = false;
     }
 }

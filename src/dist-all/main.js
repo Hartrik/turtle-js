@@ -4,6 +4,7 @@ import { TurtleComponent } from "../TurtleComponent.js";
 import { TurtleExamplesComponent } from "../TurtleExamplesComponent.js";
 import { TurtlePublishComponent } from "../TurtlePublishComponent.js";
 import { TurtleGalleryComponent } from "../TurtleGalleryComponent.js";
+import { Analytics } from "../Analytics.js";
 
 
 export function builder() {
@@ -57,6 +58,7 @@ class Builder {
             turtleComponent.setEditorSize(690, 300);
             turtleComponent.initialize();
             examplesComponent.selectFirst();
+            Analytics.triggerFeatureUsed(Analytics.FEATURE_APP_INITIALIZED);
         });
 
         this.#tmpTurtleComponent = turtleComponent;

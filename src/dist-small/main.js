@@ -1,5 +1,6 @@
 import { TurtleComponent } from "../TurtleComponent.js";
 import { Context } from "../Context.js";
+import { Analytics } from "../Analytics.js";
 
 
 export function builder() {
@@ -39,7 +40,10 @@ class Builder {
         let context = new Context(this.#csrfParameterName, this.#csrfToken);
 
         let turtleComponent = new TurtleComponent(context, this.#example);
-        setTimeout(() => turtleComponent.initialize());
+        setTimeout(() => {
+            turtleComponent.initialize();
+            Analytics.triggerFeatureUsed(Analytics.FEATURE_APP_INITIALIZED);
+        });
         return turtleComponent.createNode();
     }
 }

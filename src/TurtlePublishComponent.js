@@ -1,5 +1,6 @@
 import { DomBuilder } from "./DomBuilder.js";
 import { ServerApi } from "./ServerApi.js";
+import { Analytics } from "./Analytics.js";
 
 /**
  * @requires jQuery
@@ -51,6 +52,7 @@ export class TurtlePublishComponent {
 
         ServerApi.postGift(this.#context, code).then(value => {
             onSuccess();
+            Analytics.triggerFeatureUsed(Analytics.FEATURE_PUBLISH);
         }).catch(reason => {
             alert('Publishing failed');
             console.log(reason);

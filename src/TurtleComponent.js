@@ -1,6 +1,7 @@
 import { TurtleGraphics } from "./TurtleGraphics.js";
 import { Context } from "./Context.js";
 import { DomBuilder } from "./DomBuilder.js";
+import { Analytics } from "./Analytics.js";
 import { EditorView, basicSetup } from "codemirror"
 
 /**
@@ -33,6 +34,8 @@ export class TurtleComponent {
 
     editor;
     turtleGraphics;
+
+    settingText = false;
 
     /**
      *
@@ -137,8 +140,9 @@ export class TurtleComponent {
     _initializeOverlay() {
         let toolbar = DomBuilder.div({ class: 'turtle-graphics-toolbar' });
 
-        toolbar.append(DomBuilder.link('Download as SVG', { class: 'btn btn-sm btn-secondary' }, e => {
+        toolbar.append(DomBuilder.link('Export as SVG', { class: 'btn btn-sm btn-secondary' }, e => {
             Utils.downloadSVG(this.nodeCanvas, 'image.svg');
+            Analytics.triggerFeatureUsed(Analytics.FEATURE_EXPORT_SVG);
         }));
 
         this.init.actions.forEach((value, key) => {
@@ -163,6 +167,10 @@ export class TurtleComponent {
                     if (v.docChanged) {
                         this.turtleGraphics.setDrawCursor(true);
                         this._redraw();
+
+                        if (!this.settingText) {
+                            Analytics.triggerFeatureUsed(Analytics.FEATURE_EDITOR);
+                        }
                     }
                 })
             ]
@@ -179,10 +187,13 @@ export class TurtleComponent {
             dialog.setHeaderContent('Interpreter output');
             dialog.addCloseButton('Close');
             dialog.show(dialogAnchor);
+
+            Analytics.triggerFeatureUsed(Analytics.FEATURE_SHOW_LOG);
         });
     }
 
     setText(code) {
+        this.settingText = true;
         this.editor.dispatch({
             changes: {
                 from: 0,
@@ -190,6 +201,7 @@ export class TurtleComponent {
                 insert: code
             }
         });
+        this.settingText = false;
     }
 
     getText() {
