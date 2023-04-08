@@ -1,0 +1,196 @@
+
+.turtle-graphics-component {
+}
+
+.turtle-graphics-component .turtle-graphics-canvas {
+    margin-top: 8pt;
+    outline: 1px solid #b7b7b7;
+}
+
+.turtle-graphics-component .turtle-graphics-canvas-header {
+    margin-left: 10pt;
+    position: relative;
+    height: 0;
+    overflow: visible;
+}
+
+.turtle-graphics-component .turtle-graphics-canvas-header .turtle-show-log-button {
+    font-size: large;
+    font-weight: bold;
+}
+
+.turtle-graphics-component .turtle-graphics-overlay {
+    margin-top: -80px;
+    position: absolute;
+    z-index: 10;
+    background-color: rgb(0, 0, 0, 4%);
+    display: none;
+}
+
+.turtle-graphics-component .turtle-graphics-overlay:hover,
+.turtle-graphics-component .turtle-graphics-canvas:hover + .turtle-graphics-overlay {
+    display: block;
+}
+
+.turtle-graphics-component .turtle-graphics-overlay .turtle-graphics-toolbar {
+    padding: 1em;
+}
+
+.turtle-graphics-component .turtle-graphics-overlay .turtle-graphics-toolbar .btn {
+    margin-right: 0.5em;
+}
+
+.turtle-graphics-component .turtle-graphics-editor {
+    margin-top: 8pt;
+    margin-bottom: 8pt;
+    border-left-width: 1px;
+    border-left-style: solid;
+    border-left-color: transparent;
+}
+
+.turtle-graphics-component.has-error .turtle-graphics-editor {
+    border-left-width: 1px;
+    border-left-style: solid;
+    border-left-color: red;
+}
+
+/* --- examples --- */
+
+.turtle-graphics-examples-component {
+    float: right;
+    display: inline-block;
+}
+
+.turtle-graphics-examples-component .example-list {
+    white-space: nowrap;
+    padding-top: 10px;
+}
+
+.turtle-graphics-examples-component .example-list .example-image {
+    display: inline;
+    margin-left: 10px;
+}
+
+.turtle-graphics-examples-component .example-list .example-image img {
+    width: 120px;
+    height: 70px;
+    border: 1px solid #ddd;
+    cursor: pointer;
+}
+
+.turtle-graphics-examples-component .example-list .example-image:not(:first-child) {
+    margin-left: -50px;
+}
+
+.turtle-graphics-examples-component .example-list .example-image.selected img,
+.turtle-graphics-examples-component .example-list .example-image:hover img {
+    border: 1px solid red;
+}
+
+@media (min-width: 460px) {
+    .turtle-graphics-examples-component .example-list .example-image:not(:first-child) {
+        margin-left: -30px;
+    }
+}
+
+@media (min-width: 576px) {
+    .turtle-graphics-examples-component .example-list .example-image:not(:first-child) {
+        margin-left: 10px;
+    }
+}
+
+@media (min-width: 992px) {
+    .turtle-graphics-examples-component .example-list {
+        display: block;
+        padding-top: unset;
+    }
+
+    .turtle-graphics-examples-component .example-list .example-image {
+        display: block;
+        margin-left: 0;
+        padding-bottom: 10px;
+    }
+
+    .turtle-graphics-examples-component .example-list .example-image img {
+        width: 200px;
+        height: 116px;
+    }
+
+    .turtle-graphics-examples-component .example-list .example-image:not(:first-child) {
+        margin-left: unset;
+        margin-top: -45px;
+    }
+
+    .turtle-graphics-examples-component .example-list .example-image:nth-child(odd) {
+        margin-left: 10px;
+    }
+
+    .turtle-graphics-examples-component .example-list {
+        margin-top: 8pt;
+    }
+
+    .turtle-graphics-examples-component .example-list:nth-child(1) {
+    }
+
+    .turtle-graphics-examples-component .example-list:nth-child(2) {
+    }
+}
+
+@media (min-width: 1200px) {
+    .turtle-graphics-examples-component .example-list {
+        margin-top: 8pt;
+    }
+
+    .turtle-graphics-examples-component .example-list .example-image:not(:first-child) {
+        margin-top: unset;
+    }
+
+    .turtle-graphics-examples-component .example-list .example-image:nth-child(odd) {
+        margin-left: unset;
+    }
+
+    .turtle-graphics-examples-component .example-list:nth-child(1) {
+    }
+
+    .turtle-graphics-examples-component .example-list:nth-child(2) {
+        margin-left: 160px;
+        margin-top: -440px;
+    }
+}
+
+/* --- help --- */
+
+.turtle-graphics-help {
+    background-color: #f7f7f7;
+    padding: 0 1em 1em;
+}
+
+@media (min-width: 768px) {
+    .turtle-graphics-help {
+        column-count: 2;
+    }
+}
+
+.turtle-graphics-help ul {
+    margin: 0;
+}
+
+.turtle-graphics-help p.list-label {
+    padding-top: 1em;
+    margin-bottom: 0.25em;
+}
+
+.turtle-graphics-help code {
+    font-family: monospace;
+    white-space: nowrap;
+}
+
+/* --- gallery --- */
+
+.turtle-graphics-gallery-component {
+}
+
+.turtle-graphics-gallery-component .row .col-md-6 {
+    padding-right: 4px;
+    padding-left: 4px
+}
