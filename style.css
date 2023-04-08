@@ -43,13 +43,13 @@
 .turtle-graphics-component .turtle-graphics-editor {
     margin-top: 8pt;
     margin-bottom: 8pt;
-    border-left-width: 1px;
+    border-left-width: 2px;
     border-left-style: solid;
-    border-left-color: transparent;
+    border-left-color: #f5f5f5;
 }
 
 .turtle-graphics-component.has-error .turtle-graphics-editor {
-    border-left-width: 1px;
+    border-left-width: 2px;
     border-left-style: solid;
     border-left-color: red;
 }
