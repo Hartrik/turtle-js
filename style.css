@@ -158,33 +158,6 @@
     }
 }
 
-/* --- help --- */
-
-.turtle-graphics-help {
-    background-color: #f7f7f7;
-    padding: 0 1em 1em;
-}
-
-@media (min-width: 768px) {
-    .turtle-graphics-help {
-        column-count: 2;
-    }
-}
-
-.turtle-graphics-help ul {
-    margin: 0;
-}
-
-.turtle-graphics-help p.list-label {
-    padding-top: 1em;
-    margin-bottom: 0.25em;
-}
-
-.turtle-graphics-help code {
-    font-family: monospace;
-    white-space: nowrap;
-}
-
 /* --- gallery --- */
 
 .turtle-graphics-gallery-component {

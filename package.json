@@ -1,0 +1,25 @@
+{
+  "name": "turtle-js",
+  "version": "1.0.0-SNAPSHOT",
+  "browser_all": "dist/turtle-js.all.umd.js",
+  "browser_small": "dist/turtle-js.small.umd.js",
+  "dependencies": {
+    "@rollup/plugin-image": "^3.0.2",
+    "codemirror": "^6.0.1",
+    "file-saver": "^2.0.5"
+  },
+  "devDependencies": {
+    "@rollup/plugin-commonjs": "^24.0.1",
+    "@rollup/plugin-node-resolve": "^15.0.1",
+    "rollup": "^2.79.1",
+    "rollup-plugin-string": "^3.0.0"
+  },
+  "scripts": {
+    "build": "rollup -c",
+    "dev": "rollup -c -w",
+    "pretest": "npm run build"
+  },
+  "files": [
+    "dist"
+  ]
+}

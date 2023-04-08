@@ -1,0 +1,7 @@
+R(6) {
+  H
+  R(5) {
+    D(50)+(60)
+    D(50)-(120)   # try append F, Z or D here
+  }
+}

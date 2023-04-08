@@ -6,17 +6,15 @@ import { TurtleComponent } from "./TurtleComponent.js";
  * @requires jQuery
  *
  * @author Patrik Harag
- * @version 2022-10-17
+ * @version 2023-04-08
  */
 export class TurtleGalleryComponent {
 
     #context;
-    #rootNode;
     #enableAdminButtons = false;
 
-    constructor(context, rootNode) {
+    constructor(context) {
         this.#context = context;
-        this.#rootNode = rootNode;
     }
 
     enableAdminButtons() {
@@ -67,7 +65,7 @@ export class TurtleGalleryComponent {
             panel.append($('<p><strong>Cannot load examples</strong></p>'));
         });
 
-        this.#rootNode.append(panel);
+        return panel;
     }
 
     #initTurtleGraphics(image, parent) {

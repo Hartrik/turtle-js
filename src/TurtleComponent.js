@@ -1,13 +1,13 @@
 import { TurtleGraphics } from "./TurtleGraphics.js";
 import { Context } from "./Context.js";
 import { DomBuilder } from "./DomBuilder.js";
+import { EditorView, basicSetup } from "codemirror"
 
 /**
  * @requires jQuery
- * @requires CodeMirror
  *
  * @author Patrik Harag
- * @version 2022-10-12
+ * @version 2023-04-08
  */
 export class TurtleComponent {
 
@@ -32,6 +32,7 @@ export class TurtleComponent {
     nodeDialogAnchor;
 
     editor;
+    turtleGraphics;
 
     /**
      *
@@ -88,10 +89,10 @@ export class TurtleComponent {
         this._initializeOverlay();
 
         // init editor
-        this.editor = this._createEditor(this.init.code, this.nodeEditorPanel[0]);
+        this.editor = this._createEditor(this.init.code);
+        this.nodeEditorPanel.append(this.editor.dom);
         const editorWidth = Math.min((this.init.editorWidthPx !== null) ? this.init.editorWidthPx : Number.MAX_VALUE,
                 this.nodeCanvas.parent().width());
-        this.editor.setSize(editorWidth, this.init.editorHeightPx);
 
         // set panel max width - this allows to place something next
         this.nodePanel.css('max-width', Math.max(canvasWidth, editorWidth) + 'px');
@@ -100,27 +101,8 @@ export class TurtleComponent {
         this.nodeCanvasOverlay.width(canvasWidth);
 
         // init turtle graphics
-        let turtleGraphics = new TurtleGraphics(this.nodeCanvas);
-        turtleGraphics.setDrawCursor(this.init.drawCursor);
-
-        let redraw = () => {
-            this.nodePanel.removeClass('has-error');
-            this.nodeCanvasHeader.empty();
-
-            let logs = [];
-            turtleGraphics.setLogHandler((msg, severity) => logs.push(severity + ': ' + msg));
-            turtleGraphics.draw(this.editor.getValue());
-
-            if (logs.length > 0) {
-                this.nodePanel.addClass('has-error');
-                this.nodeCanvasHeader.append(this.#createButtonShowLog(this.nodeDialogAnchor, logs))
-            }
-        };
-
-        this.editor.on('change', (e) => {
-            turtleGraphics.setDrawCursor(true);
-            redraw();
-        });
+        this.turtleGraphics = new TurtleGraphics(this.nodeCanvas);
+        this.turtleGraphics.setDrawCursor(this.init.drawCursor);
 
         if (this.init.collapsed) {
             let hidden = true;
@@ -135,7 +117,21 @@ export class TurtleComponent {
             });
         }
 
-        redraw();
+        this._redraw();
+    }
+
+    _redraw() {
+        this.nodePanel.removeClass('has-error');
+        this.nodeCanvasHeader.empty();
+
+        let logs = [];
+        this.turtleGraphics.setLogHandler((msg, severity) => logs.push(severity + ': ' + msg));
+        this.turtleGraphics.draw(this.getText());
+
+        if (logs.length > 0) {
+            this.nodePanel.addClass('has-error');
+            this.nodeCanvasHeader.append(this.#createButtonShowLog(this.nodeDialogAnchor, logs))
+        }
     }
 
     _initializeOverlay() {
@@ -158,18 +154,18 @@ export class TurtleComponent {
         });
     }
 
-    _createEditor(code, box) {
-        return new CodeMirror(box,  {
-            value: code,
-            matchBrackets: true,
-            lineNumbers: true,
-            lineWrapping: true,
-            indentWithTabs: false,
-            smartIndent: true,
-            extraKeys: {
-                "Tab": (cm) => cm.execCommand("indentMore"),
-                "Shift-Tab": (cm) => cm.execCommand("indentLess"),
-            },
+    _createEditor(code) {
+        return new EditorView({
+            doc: code,
+            extensions: [
+                basicSetup,
+                EditorView.updateListener.of((v) => {
+                    if (v.docChanged) {
+                        this.turtleGraphics.setDrawCursor(true);
+                        this._redraw();
+                    }
+                })
+            ]
         });
     }
 
@@ -187,11 +183,17 @@ export class TurtleComponent {
     }
 
     setText(code) {
-        this.editor.setValue(code);
+        this.editor.dispatch({
+            changes: {
+                from: 0,
+                to: this.editor.state.doc.length,
+                insert: code
+            }
+        });
     }
 
     getText() {
-        return this.editor.getValue();
+        return this.editor.state.doc.toString();
     }
 }
 

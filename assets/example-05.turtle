@@ -1,0 +1,12 @@
+# try to edit code below
+# these two lines are just comments
+
+D(100)   # draw forward by 100
++(90)    # turn left by 90 degrees
+D(50)
++(90)
+D(100)
++(90)
+D(25)
+
+# you can also select different example...

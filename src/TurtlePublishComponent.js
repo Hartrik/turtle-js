@@ -5,17 +5,17 @@ import { ServerApi } from "./ServerApi.js";
  * @requires jQuery
  *
  * @author Patrik Harag
- * @version 2022-10-17
+ * @version 2023-04-08
  */
 export class TurtlePublishComponent {
 
     #context;
-    #rootNode;
+    #messageContainer;
     #turtleComponent;
 
-    constructor(context, rootNode, turtleComponent) {
+    constructor(context, messageContainer, turtleComponent) {
         this.#context = context;
-        this.#rootNode = rootNode;
+        this.#messageContainer = messageContainer;
         this.#turtleComponent = turtleComponent;
     }
 
@@ -24,7 +24,7 @@ export class TurtlePublishComponent {
 
         let button = DomBuilder.link('Publish', { class: 'btn btn-secondary' }, (e) => {
             this.#showDialog(() => {
-                this.#rootNode.append(DomBuilder.div({ class: 'alert alert-success', role: 'alert' }, [
+                this.#messageContainer.append(DomBuilder.div({ class: 'alert alert-success', role: 'alert' }, [
                     DomBuilder.par(null, 'Published successfully')
                 ]));
                 panel.hide();
@@ -32,7 +32,7 @@ export class TurtlePublishComponent {
         });
         panel.append(button);
 
-        this.#rootNode.append(panel);
+        return panel;
     }
 
     #showDialog(onSuccess) {

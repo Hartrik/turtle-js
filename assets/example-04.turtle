@@ -1,0 +1,44 @@
+# Koch snowflake
+# https://en.wikipedia.org/wiki/Koch_snowflake
+
+$segment_part_ratio(3)
+
+@segment($length, $n) {
+  ?($n = 0) {
+    D($length)
+  }
+  ?($n > 0) {
+    @segment($length / $segment_part_ratio, $n - 1)
+    +(60)
+    @segment($length / $segment_part_ratio, $n - 1)
+    -(120)
+    @segment($length / $segment_part_ratio, $n - 1)
+    +(60)
+    @segment($length / $segment_part_ratio, $n - 1)
+  }
+}
+
+@snowflake($segment_size, $iterations) {
+  R(3) {
+    @segment($segment_size, $iterations)
+    -(120)
+  }
+}
+
+!(10)
+
+# full snowflake with border
+M(-250, 80)
+C(220)
+@snowflake(240, 3)
+F
+C(0)
+@snowflake(240, 3)
+
+# segments
+C(0)
+M(50, 140) @segment(200, 0)
+M(50, 70) @segment(200, 1)
+M(50, 0) @segment(200, 2)
+M(50, -70) @segment(200, 3)
+M(50, -140) @segment(200, 4)

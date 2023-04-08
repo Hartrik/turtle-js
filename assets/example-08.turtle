@@ -1,0 +1,23 @@
+W(3)   # set stroke width
+S(70)  # set step
+
+# triangle
+M(-125, 0)
+R(3) {
+ D
+ +(360/3)
+}
+
+# square
+M(-35, 0)
+R(4) {
+ D
+ +(360/4)
+}
+
+# pentagon
+M(75, 0)
+R(5) {
+ D
+ +(360/5)
+}
