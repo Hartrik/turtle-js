@@ -6,25 +6,20 @@ import { TurtleComponent } from "./TurtleComponent.js";
  * @requires jQuery
  *
  * @author Patrik Harag
- * @version 2023-04-08
+ * @version 2023-04-09
  */
 export class TurtleGalleryComponent {
 
     #context;
-    #enableAdminButtons = false;
 
     constructor(context) {
         this.#context = context;
     }
 
-    enableAdminButtons() {
-        this.#enableAdminButtons = true;
-    }
-
     createNode() {
         let panel = DomBuilder.div({ class: 'turtle-graphics-gallery-component' });
 
-        ServerApi.fetchExamples(this.#context).then(images => {
+        ServerApi.getImages(this.#context).then(images => {
             // shuffle
             images = images.sort(() => Math.random() - 0.5);
 
@@ -74,26 +69,9 @@ export class TurtleGalleryComponent {
         component.setEditorSize(900, 300);
         component.setCollapsed(true);
         component.setDrawCursor(false);
-
-        if (this.#enableAdminButtons) {
-            let context = this.#context;
-            component.addAction('_Update', function() {
-                ServerApi.updateExample(context, image.id, component.getText()).then(value => {
-                    alert("Updated");
-                }).catch(reason => {
-                    alert("Request failed");
-                    console.log(reason);
-                })
-            });
-            component.addAction('_Delete', function() {
-                ServerApi.deleteExample(context, image.id).then(value => {
-                    alert("Deleted");
-                }).catch(reason => {
-                    alert("Request failed");
-                    console.log(reason);
-                })
-            });
-        }
+        component.addAction('Open', function() {
+            window.location.href = ServerApi.getImageUrl(image.id);
+        });
 
         parent.append(component.createNode());
         component.initialize();

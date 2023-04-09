@@ -8,10 +8,10 @@ export default [
 
     // browser-friendly UMD build - minimal
     {
-        input: 'src/dist-small/main.js',
+        input: 'src/dist-single/main.js',
         output: {
             name: 'TurtleJS',
-            file: pkg.browser_small,
+            file: pkg.browser_single,
             format: 'umd'
         },
         plugins: [

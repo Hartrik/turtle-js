@@ -24,7 +24,6 @@ class Builder {
     #admin = false;
 
     #tmpTurtleComponent = null;
-    #tmpMessageContainer = null;
 
     setCsrf(csrfParameterName, csrfToken) {
         this.#csrfParameterName = csrfParameterName;
@@ -62,7 +61,6 @@ class Builder {
         });
 
         this.#tmpTurtleComponent = turtleComponent;
-        this.#tmpMessageContainer = messageContainer;
 
         return [
             examplesComponent.createNode(),
@@ -77,16 +75,13 @@ class Builder {
         }
 
         let context = this.#createContext();
-        let publishComponent = new TurtlePublishComponent(context, this.#tmpMessageContainer, this.#tmpTurtleComponent);
+        let publishComponent = new TurtlePublishComponent(context, this.#tmpTurtleComponent);
         return publishComponent.createNode();
     }
 
     buildGallery() {
         let context = this.#createContext();
         let galleryComponent = new TurtleGalleryComponent(context);
-        if (this.#admin) {
-            galleryComponent.enableAdminButtons();
-        }
         return galleryComponent.createNode();
     }
 }

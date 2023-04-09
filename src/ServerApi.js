@@ -3,9 +3,24 @@ import { Context } from "./Context.js";
 /**
  *
  * @author Patrik Harag
- * @version 2022-03-12
+ * @version 2023-04-09
  */
 export class ServerApi {
+
+    static getImageUrl(id) {
+        let url = window.location.href;
+
+        let hashPos = url.indexOf('#');
+        if (hashPos >= 0) {
+            url = url.substring(0, hashPos);
+        }
+
+        if (url.endsWith('/')) {
+            url = url.substring(0, url.length - 1);
+        }
+
+        return url + '/image/' + id;
+    }
 
     /**
      *
@@ -13,12 +28,12 @@ export class ServerApi {
      * @param code {string}
      * @returns {Promise}
      */
-    static postGift(context, code) {
+    static postImage(context, code) {
         let dataToSend = {};
         dataToSend[context.csrfParameterName] = context.csrfToken;
         dataToSend['code'] = code;
 
-        let url = '/app/turtle/data/gifts';
+        let url = '/app/turtle/data/images';
 
         return new Promise((resolve, reject) => {
             $.ajax({
@@ -38,8 +53,28 @@ export class ServerApi {
      * @param context {Context}
      * @returns {Promise}
      */
-    static fetchExamples(context) {
-        let url = '/app/turtle/data/examples';
+    static getImages(context) {
+        let url = '/app/turtle/data/images';
+
+        return new Promise((resolve, reject) => {
+            $.ajax({
+                url: url,
+                type: 'GET',
+                contentType: 'application/json',
+                dataType: 'json',
+                success: resolve,
+                error: reject
+            });
+        });
+    }
+
+    /**
+     *
+     * @param context {Context}
+     * @returns {Promise}
+     */
+    static getImage(context, id) {
+        let url = '/app/turtle/data/images/' + id;
 
         return new Promise((resolve, reject) => {
             $.ajax({
@@ -57,15 +92,21 @@ export class ServerApi {
      *
      * @param context {Context}
      * @param id {string}
-     * @param code {string}
+     * @param code {string|null}
+     * @param verified {boolean|null}
      * @returns {Promise}
      */
-    static updateExample(context, id, code) {
+    static updateImage(context, id, code = null, verified = null) {
         let dataToSend = {};
         dataToSend[context.csrfParameterName] = context.csrfToken;
-        dataToSend['code'] = code;
+        if (code !== null) {
+            dataToSend['code'] = code;
+        }
+        if (verified !== null) {
+            dataToSend['verified'] = verified;
+        }
 
-        let url = '/app/turtle/data/examples/' + id;
+        let url = '/app/turtle/data/images/' + id;
 
         return new Promise((resolve, reject) => {
             $.ajax({
@@ -86,8 +127,8 @@ export class ServerApi {
      * @param id {string}
      * @returns {Promise}
      */
-    static deleteExample(context, id) {
-        let url = '/app/turtle/data/examples/' + id
+    static deleteImage(context, id) {
+        let url = '/app/turtle/data/images/' + id
             + '?' + encodeURIComponent(context.csrfParameterName) + '=' + encodeURIComponent(context.csrfToken);
 
         // note: it just does not work with data parameter

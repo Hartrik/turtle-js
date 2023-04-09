@@ -6,56 +6,78 @@ import { Analytics } from "./Analytics.js";
  * @requires jQuery
  *
  * @author Patrik Harag
- * @version 2023-04-08
+ * @version 2023-04-09
  */
 export class TurtlePublishComponent {
 
     #context;
-    #messageContainer;
     #turtleComponent;
 
-    constructor(context, messageContainer, turtleComponent) {
+    #dialogAnchor;
+
+    constructor(context, turtleComponent) {
         this.#context = context;
-        this.#messageContainer = messageContainer;
         this.#turtleComponent = turtleComponent;
     }
 
     createNode() {
         let panel = DomBuilder.div({ class: 'turtle-graphics-publish-component' });
+        this.#dialogAnchor = panel;
 
+        let buttonPanel = DomBuilder.div();
         let button = DomBuilder.link('Publish', { class: 'btn btn-secondary' }, (e) => {
-            this.#showDialog(() => {
-                this.#messageContainer.append(DomBuilder.div({ class: 'alert alert-success', role: 'alert' }, [
-                    DomBuilder.par(null, 'Published successfully')
+            this.#showDialog((id) => {
+                let link = ServerApi.getImageUrl(id);
+
+                panel.append(DomBuilder.div({ class: 'alert alert-success', role: 'alert' }, [
+                    DomBuilder.par(null, 'Published successfully'),
+                    DomBuilder.par(null, [
+                        DomBuilder.span('Permanent link: '),
+                        DomBuilder.element('a', { href: link, target: '_blank' }, link)
+                    ])
                 ]));
-                panel.hide();
+                buttonPanel.hide();
             })
         });
-        panel.append(button);
-
+        buttonPanel.append(button);
+        panel.append(buttonPanel);
         return panel;
     }
 
     #showDialog(onSuccess) {
-        if (confirm('Are you sure that your creation is unique? Your IP address will be logged.')) {
-            this.#send(onSuccess);
-        }
+        let dialog = new DomBuilder.BootstrapDialog();
+        dialog.setHeaderContent('Publish');
+        dialog.setBodyContent([
+            DomBuilder.par(null, 'Are you sure that your creation is unique?'),
+            DomBuilder.par(null, 'Your IP address will be logged.')
+        ]);
+        dialog.addSubmitButton('Confirm', () => this.#send(onSuccess));
+        dialog.addCloseButton('Close');
+        dialog.show(this.#dialogAnchor);
     }
 
     #send(onSuccess) {
         let code = this.#turtleComponent.getText();
         code = code.trim();
         if (code.length > 1023) {
-            alert("Code is too long!");
+            this.#showErrorDialog('Code is too long!');
             return;
         }
 
-        ServerApi.postGift(this.#context, code).then(value => {
-            onSuccess();
+        ServerApi.postImage(this.#context, code).then(value => {
+            onSuccess(value.id);
             Analytics.triggerFeatureUsed(Analytics.FEATURE_PUBLISH);
         }).catch(reason => {
-            alert('Publishing failed');
+            this.#showErrorDialog('Publishing failed');
             console.log(reason);
         });
+    }
+
+    #showErrorDialog(message) {
+        let dialog = new DomBuilder.BootstrapDialog();
+        dialog.setBodyContent(message);
+        dialog.setHeaderContent('Error');
+        dialog.addCloseButton('Close');
+        dialog.show(this.#dialogAnchor);
     }
 }

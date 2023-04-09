@@ -2,7 +2,7 @@
   "name": "turtle-js",
   "version": "1.0.0-SNAPSHOT",
   "browser_all": "dist/turtle-js.all.umd.js",
-  "browser_small": "dist/turtle-js.small.umd.js",
+  "browser_single": "dist/turtle-js.single.umd.js",
   "dependencies": {
     "@rollup/plugin-image": "^3.0.2",
     "codemirror": "^6.0.1",

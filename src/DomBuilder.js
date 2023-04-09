@@ -1,7 +1,7 @@
 
 /**
  *
- * @version 2022-03-18
+ * @version 2023-04-09
  * @author Patrik Harag
  */
 export class DomBuilder {
@@ -74,6 +74,26 @@ export class DomBuilder {
             link.on("click", handler);
         }
         return link;
+    }
+
+    /**
+     *
+     * @param text {string}
+     * @param attributes {object|null}
+     * @param handler {function(e)}
+     * @return {jQuery<HTMLElement>}
+     */
+    static button(text, attributes = null, handler = null) {
+        if (attributes === null) {
+            attributes = {};
+        }
+        attributes['type'] = 'button';
+
+        let button = DomBuilder.element('button', attributes, text);
+        if (handler !== null) {
+            button.on("click", handler);
+        }
+        return button;
     }
 
     /**
