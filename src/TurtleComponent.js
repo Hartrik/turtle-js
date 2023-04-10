@@ -1,14 +1,15 @@
 import { TurtleGraphics } from "./TurtleGraphics.js";
 import { Context } from "./Context.js";
 import { DomBuilder } from "./DomBuilder.js";
+import { ExportUtils } from "./ExportUtils";
 import { Analytics } from "./Analytics.js";
-import { EditorView, basicSetup } from "codemirror"
+import { basicSetup, EditorView } from "codemirror";
 
 /**
  * @requires jQuery
  *
  * @author Patrik Harag
- * @version 2023-04-08
+ * @version 2023-04-10
  */
 export class TurtleComponent {
 
@@ -140,9 +141,13 @@ export class TurtleComponent {
     _initializeOverlay() {
         let toolbar = DomBuilder.div({ class: 'turtle-graphics-toolbar' });
 
-        toolbar.append(DomBuilder.link('Export as SVG', { class: 'btn btn-sm btn-secondary' }, e => {
-            Utils.downloadSVG(this.nodeCanvas, 'image.svg');
+        toolbar.append(DomBuilder.link('SVG', { class: 'btn btn-sm btn-secondary' }, e => {
+            ExportUtils.downloadSVG(this.nodeCanvas, 'image.svg');
             Analytics.triggerFeatureUsed(Analytics.FEATURE_EXPORT_SVG);
+        }));
+        toolbar.append(DomBuilder.link('PNG', { class: 'btn btn-sm btn-secondary' }, e => {
+            ExportUtils.downloadPNG(this.nodeCanvas, 'image.png');
+            Analytics.triggerFeatureUsed(Analytics.FEATURE_EXPORT_PNG);
         }));
 
         this.init.actions.forEach((value, key) => {
@@ -206,34 +211,5 @@ export class TurtleComponent {
 
     getText() {
         return this.editor.state.doc.toString();
-    }
-}
-
-/**
- *
- * @author Patrik Harag
- * @version 2022-10-11
- */
-class Utils {
-
-    static download(content, defaultFilename, contentType) {
-        // create a blob
-        let blob = new Blob([content], { type: contentType });
-        let url = URL.createObjectURL(blob);
-
-        // create a link to download it
-        let pom = document.createElement('a');
-        pom.href = url;
-        pom.setAttribute('download', defaultFilename);
-        pom.click();
-    }
-
-    static downloadSVG(svgNode, defaultFilename) {
-        let w = svgNode.width();
-        let h = svgNode.height();
-        let content = svgNode.html();
-        let svg = `<svg width="${ w }" height="${ h }" xmlns="http://www.w3.org/2000/svg">${ content }</svg>`;
-
-        Utils.download(svg, defaultFilename, 'image/svg+xml;charset=utf-8;');
     }
 }

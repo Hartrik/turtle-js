@@ -1,6 +1,6 @@
 /**
  *
- * @version 2023-04-09
+ * @version 2023-04-10
  * @author Patrik Harag
  */
 export class Analytics {
@@ -10,6 +10,7 @@ export class Analytics {
     static FEATURE_EDITOR = 'editor';
     static FEATURE_SHOW_LOG = 'show_log';
     static FEATURE_EXPORT_SVG = 'export_svg';
+    static FEATURE_EXPORT_PNG = 'export_png';
     static FEATURE_SWITCH_EXAMPLE = 'switch_example';
     static FEATURE_PUBLISH = 'publish';
 

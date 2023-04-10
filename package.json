@@ -4,13 +4,14 @@
   "browser_all": "dist/turtle-js.all.umd.js",
   "browser_single": "dist/turtle-js.single.umd.js",
   "dependencies": {
-    "@rollup/plugin-image": "^3.0.2",
+    "canvg": "^4.0.1",
     "codemirror": "^6.0.1",
     "file-saver": "^2.0.5"
   },
   "devDependencies": {
     "@rollup/plugin-commonjs": "^24.0.1",
     "@rollup/plugin-node-resolve": "^15.0.1",
+    "@rollup/plugin-image": "^3.0.2",
     "rollup": "^2.79.1",
     "rollup-plugin-string": "^3.0.0"
   },

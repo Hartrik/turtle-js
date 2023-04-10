@@ -8,6 +8,8 @@ TODO
 
 ## Development
 
+`npm install` to install dependencies.
+
 `npm run build` builds the library to `dist`.
 
 `npm run dev` builds the library, then keeps rebuilding it whenever the source files change using rollup-watch.
