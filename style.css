@@ -1,9 +1,15 @@
 
+/**
+ * @author Patrik Harag
+ * @version 2023-04-23
+ */
+
 .turtle-graphics-component {
 }
 
 .turtle-graphics-component .turtle-graphics-canvas {
     margin-top: 8pt;
+    background-color: white;
     outline: 1px solid #b7b7b7;
 }
 
@@ -43,6 +49,7 @@
 .turtle-graphics-component .turtle-graphics-editor {
     margin-top: 8pt;
     margin-bottom: 8pt;
+    background-color: white;
     border-left-width: 2px;
     border-left-style: solid;
     border-left-color: #f5f5f5;
@@ -167,7 +174,6 @@
 /* --- help --- */
 
 .turtle-graphics-help {
-    background-color: #f7f7f7;
     padding: 0 1em 1em;
 }
 
@@ -197,6 +203,6 @@
 }
 
 .turtle-graphics-gallery-component .row .col-md-6 {
-    padding-right: 4px;
-    padding-left: 4px
+    padding-right: 8px;
+    padding-left: 8px
 }
