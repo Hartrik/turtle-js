@@ -1,3 +1,4 @@
+import { DomBuilder } from "../DomBuilder.js";
 import { TurtleComponent } from "../TurtleComponent.js";
 import { TurtleAdminToolsComponent } from "../TurtleAdminToolsComponent.js";
 import { Context } from "../Context.js";
@@ -11,7 +12,7 @@ export function builder() {
 
 /**
  *
- * @version 2023-04-09
+ * @version 2023-10-30
  * @author Patrik Harag
  */
 class Builder {
@@ -47,14 +48,22 @@ class Builder {
         return this;
     }
 
-    build() {
+    #createContext() {
+        const dialogAnchor = DomBuilder.div({ class: 'turtle-graphics-dialog-anchor' });
+        document.body.prepend(dialogAnchor[0]);
+
         if (!this.#csrfParameterName) {
             throw 'CSRF parameter name not set';
         }
         if (!this.#csrfToken) {
             throw 'CSRF token not set';
         }
-        let context = new Context(this.#csrfParameterName, this.#csrfToken);
+
+        return new Context(dialogAnchor, this.#csrfParameterName, this.#csrfToken);
+    }
+
+    build() {
+        let context = this.#createContext();
 
         let turtleComponent = new TurtleComponent(context, this.#example);
         let node = turtleComponent.createNode();

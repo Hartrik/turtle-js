@@ -9,7 +9,7 @@ import { basicSetup, EditorView } from "codemirror";
  * @requires jQuery
  *
  * @author Patrik Harag
- * @version 2023-04-10
+ * @version 2023-10-30
  */
 export class TurtleComponent {
 
@@ -31,7 +31,6 @@ export class TurtleComponent {
     nodeCanvasHeader;
     nodeCanvasOverlay;
     nodeEditorPanel;
-    nodeDialogAnchor;
 
     editor;
     turtleGraphics;
@@ -77,7 +76,6 @@ export class TurtleComponent {
         panel.append(this.nodeCanvasOverlay = $('<div class="turtle-graphics-overlay"></div>'));
         panel.append($('<br>'));
         panel.append(this.nodeEditorPanel = $('<div class="turtle-graphics-editor"></div>'));
-        panel.append(this.nodeDialogAnchor = $('<div></div>'));
         this.nodePanel = panel;
         return panel;
     }
@@ -134,7 +132,7 @@ export class TurtleComponent {
 
         if (logs.length > 0) {
             this.nodePanel.addClass('has-error');
-            this.nodeCanvasHeader.append(this.#createButtonShowLog(this.nodeDialogAnchor, logs))
+            this.nodeCanvasHeader.append(this.#createButtonShowLog(logs))
         }
     }
 
@@ -182,7 +180,7 @@ export class TurtleComponent {
         });
     }
 
-    #createButtonShowLog(dialogAnchor, logs) {
+    #createButtonShowLog(logs) {
         return DomBuilder.link('!', { tabindex: '0', class: 'badge badge-pill badge-danger turtle-show-log-button', role: 'button' }, e => {
             let uniqueLines = logs.filter((item, i, ar) => ar.indexOf(item) === i);
             let uniqueLinesAsString = uniqueLines.join('\n');
@@ -191,7 +189,7 @@ export class TurtleComponent {
             dialog.setBodyContent(DomBuilder.element('code', { style: 'white-space: pre-line;' }, uniqueLinesAsString));
             dialog.setHeaderContent('Interpreter output');
             dialog.addCloseButton('Close');
-            dialog.show(dialogAnchor);
+            dialog.show(this.context.dialogAnchor);
 
             Analytics.triggerFeatureUsed(Analytics.FEATURE_SHOW_LOG);
         });

@@ -13,13 +13,15 @@ export function builder() {
 
 /**
  *
- * @version 2023-04-08
+ * @version 2023-10-30
  * @author Patrik Harag
  */
 class Builder {
 
     #csrfParameterName;
     #csrfToken;
+
+    #dialogAnchor = null;
 
     #admin = false;
 
@@ -37,13 +39,17 @@ class Builder {
     }
 
     #createContext() {
+        if (this.#dialogAnchor === null) {
+            this.#dialogAnchor = DomBuilder.div({ class: 'turtle-graphics-dialog-anchor' });
+            document.body.prepend(this.#dialogAnchor[0]);
+        }
         if (!this.#csrfParameterName) {
             throw 'CSRF parameter name not set';
         }
         if (!this.#csrfToken) {
             throw 'CSRF token not set';
         }
-        return new Context(this.#csrfParameterName, this.#csrfToken);
+        return new Context(this.#dialogAnchor, this.#csrfParameterName, this.#csrfToken);
     }
 
     buildFullEditor() {

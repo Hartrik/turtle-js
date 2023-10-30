@@ -6,14 +6,12 @@ import { Analytics } from "./Analytics.js";
  * @requires jQuery
  *
  * @author Patrik Harag
- * @version 2023-04-09
+ * @version 2023-10-30
  */
 export class TurtlePublishComponent {
 
     #context;
     #turtleComponent;
-
-    #dialogAnchor;
 
     constructor(context, turtleComponent) {
         this.#context = context;
@@ -22,8 +20,6 @@ export class TurtlePublishComponent {
 
     createNode() {
         let panel = DomBuilder.div({ class: 'turtle-graphics-publish-component' });
-        this.#dialogAnchor = panel;
-
         let buttonPanel = DomBuilder.div();
         let button = DomBuilder.link('Publish', { class: 'btn btn-secondary' }, (e) => {
             this.#showDialog((id) => {
@@ -53,7 +49,7 @@ export class TurtlePublishComponent {
         ]);
         dialog.addSubmitButton('Confirm', () => this.#send(onSuccess));
         dialog.addCloseButton('Close');
-        dialog.show(this.#dialogAnchor);
+        dialog.show(this.#context.dialogAnchor);
     }
 
     #send(onSuccess) {
@@ -78,6 +74,6 @@ export class TurtlePublishComponent {
         dialog.setBodyContent(message);
         dialog.setHeaderContent('Error');
         dialog.addCloseButton('Close');
-        dialog.show(this.#dialogAnchor);
+        dialog.show(this.#context.dialogAnchor);
     }
 }

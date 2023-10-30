@@ -1,14 +1,17 @@
 /**
  *
- * @version 2022-03-12
+ * @version 2023-10-30
  * @author Patrik Harag
  */
 export class Context {
 
+    dialogAnchor;
+
     csrfParameterName;
     csrfToken;
 
-    constructor(csrfParameterName, csrfToken) {
+    constructor(dialogAnchor, csrfParameterName, csrfToken) {
+        this.dialogAnchor = dialogAnchor;
         this.csrfParameterName = csrfParameterName;
         this.csrfToken = csrfToken;
     }
