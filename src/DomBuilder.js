@@ -1,10 +1,21 @@
 
+import $ from "jquery";
+
 /**
  *
- * @version 2023-04-09
+ * @version 2023-04-28
  * @author Patrik Harag
  */
 export class DomBuilder {
+
+    /**
+     *
+     * @param html {string}
+     * @return {jQuery<HTMLElement>}
+     */
+    static create(html) {
+        return $(html);
+    }
 
     /**
      *
@@ -78,39 +89,42 @@ export class DomBuilder {
 
     /**
      *
-     * @param text {string}
+     * @param label {string|jQuery<HTMLElement>|jQuery<HTMLElement>[]}
      * @param attributes {object|null}
      * @param handler {function(e)}
      * @return {jQuery<HTMLElement>}
      */
-    static button(text, attributes = null, handler = null) {
+    static button(label, attributes = null, handler = null) {
         if (attributes === null) {
             attributes = {};
         }
         attributes['type'] = 'button';
 
-        let button = DomBuilder.element('button', attributes, text);
+        let button = DomBuilder.element('button', attributes, label);
         if (handler !== null) {
             button.on("click", handler);
         }
         return button;
     }
-
-    /**
-     *
-     * @return {jQuery<HTMLElement>}
-     */
-    static br() {
-        return $('<br>');
-    }
 }
 
 /**
  *
- * @version 2022-10-02
+ * @version 2023-10-27
  * @author Patrik Harag
  */
 DomBuilder.Bootstrap = class {
+
+    /**
+     *
+     * @param bodyContent {string|jQuery<HTMLElement>|jQuery<HTMLElement>[]}
+     * @return {jQuery<HTMLElement>}
+     */
+    static alertInfo(bodyContent) {
+        return $(`<div class="alert alert-info alert-dismissible fade show" role="alert"></div>`)
+            .append(bodyContent)
+            .append($(`<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>`));
+    }
 
     /**
      *
@@ -149,7 +163,7 @@ DomBuilder.Bootstrap = class {
 
         return DomBuilder.div({ class: 'card' }, [
             DomBuilder.div({ class: 'card-header' }, [
-                DomBuilder.element('a', { class: 'card-link', 'data-toggle': 'collapse', href: '#' + id}, title)
+                DomBuilder.element('a', { class: 'card-link', 'data-bs-toggle': 'collapse', href: '#' + id}, title)
             ]),
             DomBuilder.div({ id: id, class: (collapsed ? 'collapse' : 'collapse show') }, [
                 DomBuilder.div({ class: 'card-body' }, bodyContent)
@@ -164,17 +178,29 @@ DomBuilder.Bootstrap = class {
      * @return {jQuery<HTMLElement>}
      */
     static initTooltip(content, node) {
-        node.tooltip('dispose');  // remove old one if present
+        if (window.bootstrap === undefined) {
+            console.error('Bootstrap library not available');
+        }
 
-        node.attr('data-toggle', 'tooltip');
-        node.attr('data-placement', 'top');
+        if (window.bootstrap !== undefined) {
+            let old = window.bootstrap.Tooltip.getInstance(node[0]);
+            if (old) {
+                old.dispose();
+            }
+        }
+
+        node.attr('data-bs-toggle', 'tooltip');
+        node.attr('data-bs-placement', 'top');
         if (typeof content === 'object') {
-            node.attr('data-html', 'true');
+            node.attr('data-bs-html', 'true');
             node.attr('title', content.html());
         } else {
             node.attr('title', content);
         }
-        node.tooltip();
+
+        if (window.bootstrap !== undefined) {
+            new window.bootstrap.Tooltip(node[0]);
+        }
         return node;
     }
 
@@ -191,16 +217,16 @@ DomBuilder.Bootstrap = class {
         let switchInput = DomBuilder.element('input', {
             type: 'checkbox',
             id: id,
-            class: 'custom-control-input',
-            style: 'width: min-content;'
+            class: 'form-check-input',
+            role: 'switch'
         });
         if (checked) {
             switchInput.attr('checked', 'true');
         }
 
-        let control = DomBuilder.div({ class: 'custom-control custom-switch' }, [
+        let control = DomBuilder.div({ class: 'form-check form-switch' }, [
             switchInput,
-            DomBuilder.element('label', { class: 'custom-control-label', for: id }, text)
+            DomBuilder.element('label', { class: 'form-check-label', for: id }, text)
         ]);
 
         if (handler !== null) {
@@ -211,11 +237,40 @@ DomBuilder.Bootstrap = class {
         }
         return control;
     }
+
+    /**
+     *
+     * @param labelContent {string|jQuery<HTMLElement>}
+     * @param buttonClass {string} e.g. btn-primary
+     * @param checked {boolean}
+     * @param handler {function(boolean)}
+     * @return {jQuery<HTMLElement>[]}
+     */
+    static toggleButton(labelContent, buttonClass, checked, handler = null) {
+        let id = 'toggle-button_' + Math.floor(Math.random() * 999_999_999);
+
+        let nodeInput = DomBuilder.element('input', {
+            type: 'checkbox',
+            class: 'btn-check',
+            checked: checked,
+            id: id
+        });
+        let nodeLabel = DomBuilder.element('label', {
+            class: 'btn ' + buttonClass,
+            for: id
+        }, labelContent)
+
+        nodeInput.change((e) => {
+            handler(nodeInput.prop('checked'));
+        });
+
+        return [nodeInput, nodeLabel];
+    }
 }
 
 /**
  *
- * @version 2022-03-18
+ * @version 2023-04-02
  * @author Patrik Harag
  */
 DomBuilder.BootstrapTable = class {
@@ -224,6 +279,10 @@ DomBuilder.BootstrapTable = class {
 
     addRow(row) {
         this.#tableBody.append(row);
+    }
+
+    addRowBefore(row) {
+        this.#tableBody.prepend(row);
     }
 
     createNode() {
@@ -235,16 +294,35 @@ DomBuilder.BootstrapTable = class {
 
 /**
  *
- * @version 2022-09-24
+ * @version 2023-10-29
  * @author Patrik Harag
  */
 DomBuilder.BootstrapDialog = class {
+
+    // will be removed after close
+    #persistent = false;
+
+    #additionalStyle = '';
 
     #headerNode = null;
     #bodyNode = null;
     #footerNodeChildren = [];
 
     #dialog = null;
+    #dialogBootstrap = null;
+
+
+    setPersistent(persistent) {
+        this.#persistent = persistent;
+    }
+
+    setSizeLarge() {
+        this.#additionalStyle = 'modal-lg';
+    }
+
+    setSizeExtraLarge() {
+        this.#additionalStyle = 'modal-xl';
+    }
 
     setHeaderContent(headerNode) {
         if (typeof headerNode === 'string') {
@@ -259,13 +337,13 @@ DomBuilder.BootstrapDialog = class {
     }
 
     addCloseButton(buttonText) {
-        let button = $(`<button type="button" class="btn btn-secondary" data-dismiss="modal"></button>`)
+        let button = $(`<button type="button" class="btn btn-secondary" data-bs-dismiss="modal"></button>`)
             .text(buttonText);
         this.#footerNodeChildren.push(button)
     }
 
     addSubmitButton(buttonText, handler) {
-        let button = $(`<button type="button" class="btn btn-primary" data-dismiss="modal"></button>`)
+        let button = $(`<button type="button" class="btn btn-primary" data-bs-dismiss="modal"></button>`)
             .text(buttonText)
             .on("click", handler);
 
@@ -277,94 +355,40 @@ DomBuilder.BootstrapDialog = class {
     }
 
     show(dialogAnchor) {
-        this.#dialog = $(`<div class="modal fade" tabindex="-1" role="dialog" aria-hidden="true"></div>`)
-            .append($(`<div class="modal-dialog modal-dialog-centered"></div>`)
-                .append($(`<div class="modal-content"></div>`)
-                    .append($(`<div class="modal-header"></div>`).append(this.#headerNode))
-                    .append($(`<div class="modal-body"></div>`).append(this.#bodyNode))
-                    .append($(`<div class="modal-footer"></div>`).append(this.#footerNodeChildren))
-                )
-            );
+        if (window.bootstrap === undefined) {
+            console.error('Bootstrap library not available');
+            return;
+        }
 
-        // add into DOM
-        dialogAnchor.append(this.#dialog);
+        if (this.#dialog === null) {
+            this.#dialog = $(`<div class="modal fade" tabindex="-1" role="dialog" aria-hidden="true"></div>`)
+                .append($(`<div class="modal-dialog modal-dialog-centered ${this.#additionalStyle}"></div>`)
+                    .append($(`<div class="modal-content"></div>`)
+                        .append($(`<div class="modal-header"></div>`).append(this.#headerNode))
+                        .append($(`<div class="modal-body"></div>`).append(this.#bodyNode))
+                        .append($(`<div class="modal-footer"></div>`).append(this.#footerNodeChildren))
+                    )
+                );
 
-        // remove from DOM after hide
-        this.#dialog.on('hidden.bs.modal', () => {
-            this.#dialog.remove();
-        });
+            // add into DOM
+            dialogAnchor.append(this.#dialog);
+        }
 
-        this.#dialog.modal('show');
+        this.#dialogBootstrap = new window.bootstrap.Modal(this.#dialog[0]);
+
+        if (!this.#persistent) {
+            // remove from DOM after hide
+            this.#dialog[0].addEventListener('hidden.bs.modal', e => {
+                this.#dialog.remove();
+            })
+        }
+
+        this.#dialogBootstrap.show();
     }
 
     hide() {
         if (this.#dialog !== null) {
-            this.#dialog.modal('hide');
+            this.#dialogBootstrap.hide();
         }
-    }
-}
-
-/**
- *
- * @version 2022-09-24
- * @author Patrik Harag
- */
-DomBuilder.BootstrapSimpleForm = class {
-
-    #formFields = [];
-    #submitButton = null;
-
-    addTextArea(label, key, initialValue = '', rows = 8) {
-        let input = DomBuilder.element('textarea', { class: 'form-control', rows: rows }, initialValue);
-        this.#formFields.push({
-            key: key,
-            label: label,
-            input: input
-        });
-        return input;
-    }
-
-    addInput(label, key, initialValue = '') {
-        let input = DomBuilder.element('input', { class: 'form-control' });
-        if (initialValue) {
-            input.val(initialValue);
-        }
-        this.#formFields.push({
-            key: key,
-            label: label,
-            input: input
-        });
-        return input;
-    }
-
-    addSubmitButton(text, handler) {
-        this.#submitButton = DomBuilder.link(text, { class: 'btn btn-primary' }, e => {
-            handler(this.getData());
-        });
-    }
-
-    createNode() {
-        let form = DomBuilder.element('form', { action: 'javascript:void(0);' });
-
-        for (let formField of this.#formFields) {
-            form.append(DomBuilder.div({ class: 'form-group' }, [
-                DomBuilder.element('label', null, formField.label),
-                formField.input
-            ]));
-        }
-
-        if (this.#submitButton) {
-            form.append(this.#submitButton);
-        }
-
-        return form;
-    }
-
-    getData() {
-        let data = {};
-        for (let formField of this.#formFields) {
-            data[formField.key] = formField.input.val();
-        }
-        return data;
     }
 }

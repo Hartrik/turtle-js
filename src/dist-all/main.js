@@ -68,11 +68,12 @@ class Builder {
 
         this.#tmpTurtleComponent = turtleComponent;
 
-        return [
+        let node = DomBuilder.div(null, [
             examplesComponent.createNode(),
             turtleComponent.createNode(),
             messageContainer,
-        ];
+        ]);
+        return node[0];
     }
 
     buildPublishPanel() {
@@ -82,12 +83,14 @@ class Builder {
 
         let context = this.#createContext();
         let publishComponent = new TurtlePublishComponent(context, this.#tmpTurtleComponent);
-        return publishComponent.createNode();
+        let node = publishComponent.createNode();
+        return node[0];
     }
 
     buildGallery() {
         let context = this.#createContext();
         let galleryComponent = new TurtleGalleryComponent(context);
-        return galleryComponent.createNode();
+        let node = galleryComponent.createNode();
+        return node[0];
     }
 }

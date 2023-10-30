@@ -1,6 +1,6 @@
+import $ from "jquery";
 
 /**
- * @requires jQuery
  *
  * @author Patrik Harag
  * @version 2021-04-07

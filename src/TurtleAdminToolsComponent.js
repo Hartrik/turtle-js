@@ -2,7 +2,6 @@ import { DomBuilder } from "./DomBuilder.js";
 import { ServerApi } from "./ServerApi.js";
 
 /**
- * @requires jQuery
  *
  * @author Patrik Harag
  * @version 2023-04-09

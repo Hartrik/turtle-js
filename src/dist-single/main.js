@@ -90,6 +90,6 @@ class Builder {
             }
         });
 
-        return node;
+        return node[0];
     }
 }

@@ -3,7 +3,6 @@ import { ServerApi } from "./ServerApi.js";
 import { TurtleComponent } from "./TurtleComponent.js";
 
 /**
- * @requires jQuery
  *
  * @author Patrik Harag
  * @version 2023-10-30

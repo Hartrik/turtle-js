@@ -6,7 +6,8 @@
   "dependencies": {
     "canvg": "^4.0.1",
     "codemirror": "^6.0.1",
-    "file-saver": "^2.0.5"
+    "file-saver": "^2.0.5",
+    "jquery": "^3.7.1"
   },
   "devDependencies": {
     "@rollup/plugin-commonjs": "^24.0.1",

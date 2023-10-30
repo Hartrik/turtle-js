@@ -4,9 +4,9 @@ import { DomBuilder } from "./DomBuilder.js";
 import { ExportUtils } from "./ExportUtils";
 import { Analytics } from "./Analytics.js";
 import { basicSetup, EditorView } from "codemirror";
+import $ from "jquery";
 
 /**
- * @requires jQuery
  *
  * @author Patrik Harag
  * @version 2023-10-30
@@ -181,7 +181,7 @@ export class TurtleComponent {
     }
 
     #createButtonShowLog(logs) {
-        return DomBuilder.link('!', { tabindex: '0', class: 'badge badge-pill badge-danger turtle-show-log-button', role: 'button' }, e => {
+        return DomBuilder.button('!', { tabindex: '0', class: 'btn btn-danger turtle-show-log-button', role: 'button' }, e => {
             let uniqueLines = logs.filter((item, i, ar) => ar.indexOf(item) === i);
             let uniqueLinesAsString = uniqueLines.join('\n');
 

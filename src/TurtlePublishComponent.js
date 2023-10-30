@@ -3,7 +3,6 @@ import { ServerApi } from "./ServerApi.js";
 import { Analytics } from "./Analytics.js";
 
 /**
- * @requires jQuery
  *
  * @author Patrik Harag
  * @version 2023-10-30

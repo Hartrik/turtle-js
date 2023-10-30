@@ -20,7 +20,6 @@ import EXAMPLE_7_IMAGE from "../assets/example-07.png";
 import EXAMPLE_8_IMAGE from "../assets/example-08.png";
 
 /**
- * @requires jQuery
  *
  * @author Patrik Harag
  * @version 2023-04-08
