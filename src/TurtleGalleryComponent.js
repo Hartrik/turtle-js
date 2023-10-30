@@ -6,7 +6,7 @@ import { TurtleComponent } from "./TurtleComponent.js";
  * @requires jQuery
  *
  * @author Patrik Harag
- * @version 2023-04-09
+ * @version 2023-10-30
  */
 export class TurtleGalleryComponent {
 
@@ -57,7 +57,10 @@ export class TurtleGalleryComponent {
             }
         }).catch(reason => {
             console.log(reason);
-            panel.append($('<p><strong>Cannot load examples</strong></p>'));
+            let alert = DomBuilder.div({ class: 'alert alert-danger' }, [
+                DomBuilder.span('Cannot load examples')
+            ]);
+            panel.append(alert);
         });
 
         return panel;
