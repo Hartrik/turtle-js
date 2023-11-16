@@ -1,4 +1,4 @@
-import { TurtleGraphics } from "./TurtleGraphics.js";
+import { TurtleGraphics } from "./core/TurtleGraphics.js";
 import { Context } from "./Context.js";
 import { DomBuilder } from "./DomBuilder.js";
 import { ExportUtils } from "./ExportUtils";
