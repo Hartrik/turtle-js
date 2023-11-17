@@ -5,7 +5,7 @@ import { Analytics } from "./Analytics.js";
 /**
  *
  * @author Patrik Harag
- * @version 2023-10-30
+ * @version 2023-11-17
  */
 export class TurtlePublishComponent {
 
@@ -63,7 +63,14 @@ export class TurtlePublishComponent {
             onSuccess(value.id);
             Analytics.triggerFeatureUsed(Analytics.FEATURE_PUBLISH);
         }).catch(reason => {
-            this.#showErrorDialog('Publishing failed');
+            let message = 'Publishing failed: ';
+            if (reason.responseJSON !== undefined && reason.responseJSON.message !== undefined) {
+                message += reason.responseJSON.message;
+            } else {
+                message += reason.statusText;
+            }
+            this.#showErrorDialog(message);
+
             console.log(reason);
         });
     }
