@@ -29,16 +29,16 @@ export class TurtleAdminToolsComponent {
         return DomBuilder.par(null, [
             DomBuilder.element('strong', null, 'Created: '),
             DomBuilder.span(new Date(this.#image.created).toDateString()),
-            DomBuilder.br(),
+            DomBuilder.element('br'),
             DomBuilder.element('strong', null, 'Verified: '),
             DomBuilder.span(this.#image.verified),
-            DomBuilder.br(),
+            DomBuilder.element('br'),
             DomBuilder.element('strong', null, 'Owner: '),
             DomBuilder.span(this.#image.owner),
-            DomBuilder.br(),
+            DomBuilder.element('br'),
             DomBuilder.element('strong', null, 'Owner IP: '),
             DomBuilder.span(this.#image.ownerIP),
-            DomBuilder.br()
+            DomBuilder.element('br')
         ]);
     }
 
