@@ -10,6 +10,8 @@ There are many other commands as well as variables, conditions, loops and proced
 
 **Online: https://harag.cz/app/turtle**
 
+![Turtle graphics example](https://files.harag.cz/www/app/turtle-js/social-preview.png)
+
 ## Milestones
 
 - 2021-03-02: The first commit
