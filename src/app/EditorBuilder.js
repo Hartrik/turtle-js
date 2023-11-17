@@ -46,6 +46,7 @@ export class EditorBuilder {
         let context = ContextBuilder.create(this.#csrfParameterName, this.#csrfToken);
 
         let turtleComponent = new TurtleComponent(context, this.#example);
+        turtleComponent.setCanvasSize(null, Math.max(Math.trunc(window.innerHeight * 0.7), 400));
         let node = turtleComponent.createNode();
 
         setTimeout(() => {
