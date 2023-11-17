@@ -19,27 +19,34 @@
   </style>
 
   <link rel="stylesheet" type="text/css" href="style.css" />
-  <script src="dist/turtle-js.all.umd.js"></script>
+  <script src="dist/turtle-js.umd.min.js"></script>
   <script>
       document.addEventListener('DOMContentLoaded', () => {
-          let builder = TurtleJS.builder()
-              .setCsrf('_csrf', 'e8010a06-abc5-4634-8c9f-0235c12e3aad')
-              .enableAdminControls();
+          const EXAMPLE = '# this is called turtle graphics\n'
+              + '\n'
+              + 'R(5) {\n'
+              + '  D(20 * 3)\n'
+              + '  R(5) {\n'
+              + '    +(60) D(20)\n'
+              + '  }\n'
+              + '}\n'
+              + '\n'
+              + 'D+MDMD-D\n';
 
-          document.getElementById('turtle-graphics-editor-wrapper').appendChild(builder.buildFullEditor());
-          document.getElementById('turtle-graphics-publish-wrapper').appendChild(builder.buildPublishPanel());
-          document.getElementById('turtle-graphics-gallery-wrapper').appendChild(builder.buildGallery());
+          let node = TurtleJS.editorBuilder()
+              .setCsrf('_csrf', 'e8010a06-abc5-4634-8c9f-0235c12e3aad')
+              .setExample(EXAMPLE)
+              .enableAdminControls()
+              .build();
+
+          document.getElementById('app-wrapper').appendChild(node);
       });
   </script>
 </head>
 <body>
 <main role="main" class="container">
   <h1>Turtle</h1>
-  <div id="turtle-graphics-editor-wrapper"></div>
-  <hr>
-  <div id="turtle-graphics-publish-wrapper"></div>
-  <hr>
-  <div id="turtle-graphics-gallery-wrapper"></div>
+  <div id="app-wrapper"></div>
 </main>
 </body>
 </html>

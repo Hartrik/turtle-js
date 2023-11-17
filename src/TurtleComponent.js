@@ -139,17 +139,17 @@ export class TurtleComponent {
     _initializeOverlay() {
         let toolbar = DomBuilder.div({ class: 'turtle-graphics-toolbar' });
 
-        toolbar.append(DomBuilder.link('SVG', { class: 'btn btn-sm btn-secondary' }, e => {
+        toolbar.append(DomBuilder.button('SVG', { class: 'btn btn-sm btn-secondary' }, e => {
             ExportUtils.downloadSVG(this.nodeCanvas, 'image.svg');
             Analytics.triggerFeatureUsed(Analytics.FEATURE_EXPORT_SVG);
         }));
-        toolbar.append(DomBuilder.link('PNG', { class: 'btn btn-sm btn-secondary' }, e => {
+        toolbar.append(DomBuilder.button('PNG', { class: 'btn btn-sm btn-secondary' }, e => {
             ExportUtils.downloadPNG(this.nodeCanvas, 'image.png');
             Analytics.triggerFeatureUsed(Analytics.FEATURE_EXPORT_PNG);
         }));
 
         this.init.actions.forEach((value, key) => {
-            toolbar.append(DomBuilder.link(key, { class: 'btn btn-sm btn-secondary' }, e => {
+            toolbar.append(DomBuilder.button(key, { class: 'btn btn-sm btn-secondary' }, e => {
                 value();
             }));
         });

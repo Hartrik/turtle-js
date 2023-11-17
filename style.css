@@ -1,7 +1,7 @@
 
 /**
  * @author Patrik Harag
- * @version 2023-10-30
+ * @version 2023-11-17
  */
 
 .turtle-graphics-component {
@@ -171,6 +171,12 @@
         margin-left: 160px;
         margin-top: -440px;
     }
+}
+
+.turtle-graphics-publish-component {
+    margin-top: 2em;
+    border: 1px solid #ddd;
+    padding: 1em;
 }
 
 /* --- help --- */

@@ -1,10 +1,7 @@
 {
   "name": "turtle-js",
   "version": "1.0.0-SNAPSHOT",
-  "browser_all": "dist/turtle-js.all.umd.js",
-  "browser_all_min": "dist/turtle-js.all.umd.min.js",
-  "browser_single": "dist/turtle-js.single.umd.js",
-  "browser_single_min": "dist/turtle-js.single.umd.min.js",
+  "copyright": "/* Turtle JS; Patrik Harag, https://harag.cz; all rights reserved */",
   "dependencies": {
     "canvg": "^4.0.1",
     "codemirror": "^6.0.1",

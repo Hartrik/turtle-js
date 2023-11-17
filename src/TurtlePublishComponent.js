@@ -19,8 +19,11 @@ export class TurtlePublishComponent {
 
     createNode() {
         let panel = DomBuilder.div({ class: 'turtle-graphics-publish-component' });
+        panel.append(DomBuilder.par(null, 'Once you draw something nice you can publish it. ' +
+            'After that, you will get a permanent link to your creation, and it may eventually appear in the gallery.'));
+
         let buttonPanel = DomBuilder.div();
-        let button = DomBuilder.link('Publish', { class: 'btn btn-secondary' }, (e) => {
+        let button = DomBuilder.button('Publish', { class: 'btn btn-secondary' }, (e) => {
             this.#showDialog((id) => {
                 let link = ServerApi.getImageUrl(id);
 
